@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createContext, useContext, useState, useEffect } from 'react';
+
 const GlobalContext = createContext();
 
 const GlobalProvider = ({ children }) => {
@@ -13,13 +14,12 @@ const GlobalProvider = ({ children }) => {
         telephone: '',
         city: '',
         province: '',
-    }
+    };
 
     // Memorizza dati
     const [query, setQuery] = useState('');
     const [searchProducts, setSearchProducts] = useState([]);
     const [formData, setFormData] = useState(initialData);
-
     const [cart, setCart] = useState(() => {
         const savedCart = localStorage.getItem("cart");
         try {
@@ -38,9 +38,11 @@ const GlobalProvider = ({ children }) => {
             return [];
         }
     });
-
     const [quantities, setQuantities] = useState([]);
     const [total, setTotal] = useState(0);
+
+    // Aggiungi lo stato per il costo di spedizione
+    const [shippingCost, setShippingCost] = useState(0); // Nuovo stato per il costo di spedizione
 
     // Gestione ricerca
     const handleSubmit = (searchTerm) => {
@@ -61,7 +63,6 @@ const GlobalProvider = ({ children }) => {
                 }
             });
     };
-    
 
     // Gestione ordinamento
     const [sortCriteria, setSortCriteria] = useState({ field: 'name', order: 'asc' });
@@ -75,12 +76,12 @@ const GlobalProvider = ({ children }) => {
         const { field, order } = sortCriteria;
         return [...products].sort((a, b) => {
             if (field === 'name') {
-                return order === 'asc' 
-                    ? a.name.localeCompare(b.name) 
+                return order === 'asc'
+                    ? a.name.localeCompare(b.name)
                     : b.name.localeCompare(a.name);
             } else if (field === 'price') {
-                return order === 'asc' 
-                    ? a.price - b.price 
+                return order === 'asc'
+                    ? a.price - b.price
                     : b.price - a.price;
             }
             return 0;
@@ -99,8 +100,7 @@ const GlobalProvider = ({ children }) => {
 
     useEffect(() => {
         localStorage.setItem("wish", JSON.stringify(wish));
-    }, [wish])
-    ;
+    }, [wish]);
 
     useEffect(() => {
         setQuantities((prevQuantities) => {
@@ -136,9 +136,9 @@ const GlobalProvider = ({ children }) => {
     const handleQuantityChange = (index, value) => {
         const product = cart[index];
         const maxStock = product.availability;
-    
+
         const newQuantity = Math.min(parseInt(value), maxStock);
-    
+
         const updatedQuantities = [...quantities];
         updatedQuantities[index] = newQuantity;
         setQuantities(updatedQuantities);
@@ -182,7 +182,8 @@ const GlobalProvider = ({ children }) => {
             headers: { 'Content-Type': 'application/json' },
         })
             .then((res) => {
-                // console.lo("Ordine completato con successo!");
+                // Imposta il nuovo shipping cost ricevuto dal backend
+                setShippingCost(res.data.shippingCost); // Aggiorna il costo di spedizione
                 setCart([]);
                 setFormData(initialData);
                 navigate("/thankyou");
@@ -215,7 +216,8 @@ const GlobalProvider = ({ children }) => {
         wish,
         viewMode,
         setViewMode,
-       
+        shippingCost, // Aggiungi shippingCost al contesto
+        setShippingCost, // Aggiungi il metodo per aggiornare shippingCost
     };
 
     return (

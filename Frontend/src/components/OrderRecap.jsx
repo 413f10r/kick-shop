@@ -1,6 +1,6 @@
 import { useGlobalContext } from "../context/GlobalContext";
 import Badge from "react-bootstrap/Badge";
-import QuantityCounter from './ QuantityCounter';
+import QuantityCounter from "./ QuantityCounter";
 
 export default function OrderRecap() {
     const { cart, handleQuantityChange, handleRemoveItem, quantities } = useGlobalContext();
@@ -12,6 +12,9 @@ export default function OrderRecap() {
         }
         return acc;
     }, 0);
+
+    // Calcolare il costo di spedizione (esempio: gratuito se il totale supera 200€)
+    const shippingCost = total > 200 ? 0 : 25;
 
     return (
         <div className="offcanvas-body">
@@ -65,15 +68,29 @@ export default function OrderRecap() {
                 </ul>
             )}
 
-            {/* Totale */}
-            <div className="input-group pt-3 d-flex justify-content-end">
-                <span className="input-group-text"><strong>TOTALE : </strong></span>
-                <Badge className='bg-success'>
-                    <h5>
-                        <strong>{total.toFixed(2)} €</strong>
-                    </h5>
-                </Badge>
-            </div>
+            {/* Se ci sono prodotti nel carrello, mostriamo il costo di spedizione e il totale */}
+            {cart.length > 0 && (
+                <div>
+                    <div className="input-group pt-3 d-flex justify-content-end">
+                        <span className="input-group-text"><strong>Costo di spedizione : </strong></span>
+                        <Badge className='bg-warning'>
+                            <h5>
+                                <strong>{shippingCost} €</strong>
+                            </h5>
+                        </Badge>
+                    </div>
+
+                    {/* Totale */}
+                    <div className="input-group pt-3 d-flex justify-content-end">
+                        <span className="input-group-text"><strong>TOTALE : </strong></span>
+                        <Badge className='bg-success'>
+                            <h5>
+                                <strong>{(total + shippingCost).toFixed(2)} €</strong>
+                            </h5>
+                        </Badge>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

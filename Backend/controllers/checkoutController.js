@@ -76,8 +76,7 @@ function storeOrder(req, res) {
       });
 
       // Aggiungi il costo di spedizione in base al totale
-      let shippingCost = totalPrice > 200 ? 0 : 10; // Se l'ordine supera 200€, spedizione gratuita, altrimenti 10€
-
+      let shippingCost = totalPrice > 200 ? 0 : 25; // Se l'ordine supera 200€, spedizione gratuita, altrimenti 10€
 
       // Query SQL per inserire l'ordine nel database
       const insertOrderSql = `
@@ -102,11 +101,11 @@ function storeOrder(req, res) {
         const orderId = results.insertId;
 
         // Crea l'elenco dei prodotti da inserire nella tabella "order_product"
-        const orderProductsDb = priceResults.map((product, index) => ([
-          orderId,
-          product.id,
-          product.name,
-          productQuantities[index],
+        const orderProductsDb = priceResults.map((product, index) => ([ 
+          orderId, 
+          product.id, 
+          product.name, 
+          productQuantities[index], 
           product.price
         ]));
 
@@ -115,8 +114,6 @@ function storeOrder(req, res) {
           quantity: productQuantities[index],
           price: product.price
         }));
-
-
 
         // Query SQL per inserire i dettagli dell'ordine nella tabella "order_product"
         const insertOrderProductSql = `INSERT INTO order_product (order_id, product_id, name_product, quantity, unit_price) VALUES ?`;
@@ -154,6 +151,7 @@ function storeOrder(req, res) {
               status: "success",
               message: "Ordine aggiunto con successo",
               total: totalPrice,
+              shippingCost: shippingCost, // Aggiungi il costo di spedizione nella risposta
               differenza: subResults // Restituisce l'aggiornamento della disponibilità dei prodotti
             });
           });
