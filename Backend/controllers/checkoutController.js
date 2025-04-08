@@ -75,17 +75,21 @@ function storeOrder(req, res) {
         totalPrice += product.price * productQuantities[index];
       });
 
+      // Aggiungi il costo di spedizione in base al totale
+      let shippingCost = totalPrice > 200 ? 0 : 10; // Se l'ordine supera 200€, spedizione gratuita, altrimenti 10€
+
+
       // Query SQL per inserire l'ordine nel database
       const insertOrderSql = `
         INSERT INTO orders (
           user_name, user_surname, user_email, address_shipping, address_invoice, 
-          telephone, city, province, carts, total
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+          telephone, city, province, carts, total, shippingCost
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
       // Esegui l'inserimento dell'ordine
       connection.query(insertOrderSql, [
         userName, userSurname, userEmail, addressShipping,
-        addressInvoice, telephone, city, province, JSON.stringify(carts), totalPrice
+        addressInvoice, telephone, city, province, JSON.stringify(carts), totalPrice, shippingCost 
       ], (err, results) => {
         if (err) {
           return res.status(500).json({
@@ -141,9 +145,9 @@ function storeOrder(req, res) {
                 details: err.message
               });
             }
-             
+
             // Invia l'email di conferma
-            sendOrderConfirmationEmail(userEmail, orderId, totalPrice, userName, userSurname, city, province, telephone, addressShipping, orderProductsForEmail );
+            sendOrderConfirmationEmail(userEmail, orderId, totalPrice, userName, userSurname, city, province, telephone, addressShipping, orderProductsForEmail);
 
             // Risposta finale: ordine inserito con successo e disponibilità aggiornata
             res.status(201).json({
