@@ -1,61 +1,220 @@
-KICK-SHOP
+## Tecnologie Utilizzate
 
-Categoria merceologica --> Abbigliamento sportivo —> calcio
+### Frontend
+- **React**: Libreria principale per la creazione dell'interfaccia utente.
+- **React Router**: Per la gestione della navigazione tra le pagine.
+- **Bootstrap**: Per il design responsivo e l'utilizzo di componenti predefiniti.
+- **Axios**: Per effettuare chiamate API e gestire i dati dinamici.
+- **Font Awesome**: Per l'integrazione di icone moderne e interattive.
+- **CSS Personalizzato**: Per personalizzare il design e aggiungere effetti visivi avanzati.
 
-Utente target —> IT
+### Backend
+- **JSON Server** (in locale): Simulazione di un backend per la gestione dei dati dei prodotti.
 
-Il nostro store si concentra esclusivamente su articoli calcistici, fornendo
-soluzioni su misura per atleti ed appassionati di calcio. Non trattiamo prodotti
-per bambini, poiché il nostro focus è offrire capi e accessori tecnici progettati
-specificamente per uomini e donne.
+---
 
-1. homepage
-hero space
-visualizzazione di almeno due sezioni di prodotti (es. più venduti, ultimi arrivi)
+## Funzionalità Principali
 
-2. pagina di ricerca
-barra di ricerca con opzioni di ordinamento (prezzo, nome, recenti)
-visualizzazione dei risultati di ricerca
+### 1. Header
+- Barra di navigazione con link alle pagine principali.
+- Icone per wishlist e carrello con badge dinamici che mostrano il numero di elementi.
+- Logo interattivo con effetto hover.
 
-3. pagina di dettaglio prodotto
-visualizzazione delle informazioni del prodotto
-possibilità di aggiungere il prodotto al carrello
+### 2. Visualizzazione Prodotti
+- **Modalità Griglia**: Mostra i prodotti in un layout a griglia.
+- **Modalità Lista**: Mostra i prodotti in un layout a lista.
+- **Card Verticali**: Utilizzate per la visualizzazione in griglia.
+- **Card Orizzontali**: Utilizzate per la visualizzazione dettagliata di un singolo prodotto.
 
-4. carrello
-possibilità di modificare le quantità dei prodotti nel carrello
-visualizzare il totale del carrello
+### 3. Filtri
+- Filtri dinamici per categoria, prezzo, genere, stagione, ecc.
 
-5. checkout
-inserimento dei dati di fatturazione e spedizione del cliente
-riepilogo dell’ordine con il totale
+### 4. Wishlist
+- Aggiunta di prodotti alla wishlist con un clic sull'icona del cuore.
+- Gestione della wishlist tramite stato globale.
 
-6. invio email
-invio di email di conferma ordine sia al cliente che al 
+### 5. Carrello
+- Aggiunta di prodotti al carrello con un clic sull'icona del carrello.
+- Gestione del carrello tramite stato globale.
 
-7. doppia visualizzazione dei risultati di ricerca
-possibilità di visualizzare i risultati di ricerca in griglia o in lista
+### 6. Prodotti Correlati
+- Mostra prodotti simili in base al brand del prodotto visualizzato.
 
-8. email in HTML
-formattare il corpo dell’email in HTML gestendo anche il supporto alle
-immagini
+### 7. Categorie
+- Sezione dedicata alle categorie principali (Uomo, Donna, Estate, Inverno) con immagini e pulsanti interattivi.
 
-9. spedizione gratuita
-spedizione gratuita per ordini che superano una soglia minima di spesa
+### 8. Design Moderno
+- Utilizzo di gradienti, colori fluo e metallici per un look accattivante.
+- Effetti hover su bottoni, icone e immagini.
 
-10. prodotti correlati
-visualizzare i prodotti correlati nella pagina di dettaglio di un prodotto
+---
 
-11. wishlist
-aggiunta/rimozione prodotti da una lista dei desideri
-visualizzazione della lista in una pagina dedicata
+## Struttura del Progetto
 
+### Schema delle Cartelle
+```plaintext
+kick-shop/
+├── Frontend/
+│   ├── public/
+│   │   ├── index.html
+│   │   └── favicon.ico
+│   ├── src/
+│   │   ├── assets/
+│   │   │   ├── img/
+│   │   │   │   ├── logo-kick-shop.png
+│   │   │   │   ├── category/
+│   │   │   │   │   ├── manCategory.jpg
+│   │   │   │   │   ├── womanCategory.jpg
+│   │   │   │   │   ├── summerCategory.jpg
+│   │   │   │   │   └── winterCategory.jpg
+│   │   ├── components/
+│   │   │   ├── Header.jsx
+│   │   │   ├── VerticalProductCard.jsx
+│   │   │   ├── HorizontalProductCard.jsx
+│   │   │   ├── CategorySection.jsx
+│   │   │   ├── FilterSection.jsx
+│   │   │   └── Search.jsx
+│   │   ├── context/
+│   │   │   └── GlobalContext.jsx
+│   │   ├── pages/
+│   │   │   ├── BallonPage.jsx
+│   │   │   ├── ProductPage.jsx
+│   │   │   └── CheckoutPage.jsx
+│   │   ├── css/
+│   │   │   └── index.css
+│   │   ├── App.jsx
+│   │   └── index.jsx
+│   ├── package.json
+│   └── README.md
+```
 
-Requisiti tecnici:
-il sito deve essere completamente responsive
-è fortemente consigliato utilizzare le tecnologie studiate durante il corso
-tutti i dati inseriti dagli utenti devono essere validati sia lato client che lato
-server
-la pagina non deve mai eseguire un refresh completo
-gestire il caso in cui la pagina non esiste (la classica pagina 404)
-condivisione dei risultati di ricerca tramite URL
-l’ID prodotto non deve mai essere esposto
+---
+
+## Installazione
+
+### Prerequisiti
+- Node.js (versione 14 o superiore)
+- npm o yarn
+
+### Passaggi
+1. Clona il repository:
+   ```bash
+   git clone https://github.com/tuo-username/kick-shop.git
+   cd kick-shop/Frontend
+   ```
+
+2. Installa le dipendenze:
+   ```bash
+   npm install
+   ```
+
+3. Avvia il server JSON (per simulare il backend):
+   ```bash
+   npx json-server --watch db.json --port 3000
+   ```
+
+4. Avvia l'applicazione React:
+   ```bash
+   npm start
+   ```
+
+5. Apri il browser e visita:
+   ```
+   http://localhost:3000
+   ```
+
+---
+
+### Installazione di Pacchetti Specifici
+
+Se hai bisogno di installare pacchetti specifici, usa i seguenti comandi:
+
+- **React Router**:
+   ```bash
+   npm install react-router-dom
+   ```
+
+- **Bootstrap**:
+   ```bash
+   npm install bootstrap
+   ```
+
+- **Font Awesome**:
+   ```bash
+   npm install @fortawesome/fontawesome-free
+   ```
+
+- **Axios**:
+   ```bash
+   npm install axios
+   ```
+
+- **JSON Server** (per simulare il backend):
+   ```bash
+   npm install json-server --save-dev
+   ```
+
+---
+
+## Logica del Progetto
+
+### 1. Stato Globale
+- Gestito tramite `GlobalContext`.
+- Contiene:
+  - **`viewMode`**: Modalità di visualizzazione (griglia o lista).
+  - **`cart`**: Stato del carrello.
+  - **`wish`**: Stato della wishlist.
+
+### 2. Chiamate API
+- Effettuate tramite Axios.
+- **Endpoint principali**:
+  - `GET /products`: Recupera tutti i prodotti.
+  - `GET /products/:slug`: Recupera un singolo prodotto.
+
+### 3. Componenti Riutilizzabili
+- **Card Verticali e Orizzontali**: Utilizzate per visualizzare i prodotti in diverse modalità.
+- **Sezioni Categoria e Filtri**: Modulari e facilmente estendibili.
+
+---
+
+## Struttura dei Dati
+
+### Esempio di Prodotto
+```json
+{
+  "id": 1,
+  "name": "Pallone da Calcio",
+  "description": "Un pallone da calcio di alta qualità.",
+  "price": 29.99,
+  "gender": "Unisex",
+  "season": "Estate",
+  "brand": "Nike",
+  "sizes": ["S", "M", "L"],
+  "images": [
+    { "id": 1, "image_url": "https://example.com/image1.jpg" },
+    { "id": 2, "image_url": "https://example.com/image2.jpg" }
+  ],
+  "availability": 10,
+  "slug": "pallone-da-calcio"
+}
+```
+
+---
+
+## Stile e Design
+- **CSS Personalizzato**: File `Frontend/src/css/index.css` per personalizzare lo stile.
+- **Bootstrap**: Utilizzato per layout e componenti predefiniti.
+- **Font Awesome**: Per icone interattive.
+
+---
+
+## Possibili Miglioramenti
+- Implementazione di un backend reale con autenticazione.
+- Aggiunta di una pagina di checkout completa.
+- Miglioramento della gestione degli errori nelle chiamate API.
+- Ottimizzazione per dispositivi mobili.
+
+---
+
+## Autore
+Progetto sviluppato da **AleFioretti**. Per domande o suggerimenti, contattami su [GitHub](https://github.com/tuo-username).
