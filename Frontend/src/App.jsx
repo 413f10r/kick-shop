@@ -22,6 +22,7 @@ import BallonPage from "./pages/BallonPage";
 // components
 import CartSection from "./components/CartSection";
 import WishSection from "./components/WishSection";
+import MiniGamePage from "./pages/MiniGamePage";
 
 function App() {
     return (
@@ -42,6 +43,7 @@ function App() {
                         <Route path="/search" Component={SearchPage} />
                         <Route path="/ballon" Component={BallonPage} />
                         <Route path="/thankyou" Component={ThankYou} />
+                        <Route path="/minigame" Component={MiniGamePage} />
 
                     </Route>
                     <Route path="*" Component={NotFound} />
