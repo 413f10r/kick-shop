@@ -1,0 +1,54 @@
+/* Contenitore del gioco */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--light-gray);
+    overflow: hidden;
+    position: absolute;
+}
+
+/* Porta */
+.goal {
+    position: absolute;
+    width: 300px;
+    height: 150px;
+    border: 5px solid var(--dark-blue);
+    border-top: none;
+    margin-top: 20px;
+    background-color: var(--white);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Pallone */
+.ball {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: var(--red);
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    animation: bounce 2s infinite ease-in-out;
+}
+
+/* Animazione del rimbalzo */
+@keyframes bounce {
+    0% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(200px, 50px);
+    }
+    50% {
+        transform: translate(0, 100px);
+    }
+    75% {
+        transform: translate(-200px, 50px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
