@@ -12,9 +12,15 @@
 /* header */
 /* Stile generale per l'header */
 header {
-    background-color: var(--red);
+    background-image: url('../assets/img/category/headerbg4.PNG');
+    /* Imposta l'immagine come sfondo */
+    background-size: cover;
+    /* Adatta l'immagine per coprire l'intero header */
+    background-position: center;
+    /* Centra l'immagine */
+    color: var(--white);
+    /* Assicura che il testo sia leggibile */
 }
-
 .icon_bars {
     color: white;
     border-radius: 25%;
@@ -112,9 +118,6 @@ header {
     color: var(--white);
 }
 
-#root {
-    background-color: var(--gray);
-}
 
 main {
     padding-top: 100px;
@@ -139,7 +142,7 @@ main {
     overflow: hidden;
 }
 
-.font-nav-header{
+.font-nav-header {
     font-family: "Black Ops One", system-ui;
     font-weight: 600;
     font-style: normal;
@@ -204,6 +207,7 @@ main {
     margin-bottom: 20px;
     position: relative;
 }
+
 .category-title-riep {
     font-family: "Black Ops One", system-ui;
     font-size: 1.5rem;

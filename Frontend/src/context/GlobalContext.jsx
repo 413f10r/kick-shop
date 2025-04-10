@@ -17,6 +17,7 @@ const GlobalProvider = ({ children }) => {
         province: '',
     };
 
+    // Stati globali
     const [query, setQuery] = useState('');
     const [searchProducts, setSearchProducts] = useState([]);
     const [formData, setFormData] = useState(initialData);
@@ -31,23 +32,56 @@ const GlobalProvider = ({ children }) => {
     const [quantities, setQuantities] = useState([]);
     const [total, setTotal] = useState(0);
     const [shippingCost, setShippingCost] = useState(0);
+    const [viewMode, setViewMode] = useState("grid"); // "grid" o "list"
+    const [products, setProducts] = useState([]); // Stato globale per tutti i prodotti
 
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    
+    // Funzione generica per il fetch dei prodotti
+    const fetchProducts = async () => {
+        try {
+            const response = await axios.get("http://localhost:3000/products");
+            setProducts(response.data);
+        } catch (error) {
+            console.error("Errore durante il fetch dei prodotti:", error);
+        }
+    };
+
+    // Funzione per filtrare i prodotti in base a una condizione
+    const filterProducts = (filterCondition) => {
+        return products.filter(filterCondition);
+    };
+
+    // Funzione per rendere i prodotti filtrati
+    const renderFilteredProducts = (filterCondition) => {
+        return filterProducts(filterCondition).map((product) => (
+            <div
+                className={viewMode === "grid" ? "col-lg-3 col-md-4 col-sm-6 g-3" : "col-12 py-3"}
+                key={product.id}
+            >
+                {viewMode === "grid" ? (
+                    <VerticalProductCard product={product} viewMode={viewMode} />
+                ) : (
+                    <ListProductCard product={product} />
+                )}
+            </div>
+        ));
+    };
+
     // Gestione ricerca
     const handleSubmit = (searchTerm, shouldNavigate = true) => {
         if (!searchTerm.trim()) return;
-    
+
         if (shouldNavigate) {
             const currentParams = new URLSearchParams(searchParams);
             currentParams.set("q", searchTerm);
             if (sortCriteria.field) currentParams.set("sortField", sortCriteria.field);
             if (sortCriteria.order) currentParams.set("sortOrder", sortCriteria.order);
-    
+
             navigate(`/search?${currentParams.toString()}`);
         }
-    
+
         // Fetch dei prodotti
         axios.get(`http://localhost:3000/search/${searchTerm}`)
             .then((res) => {
@@ -67,8 +101,6 @@ const GlobalProvider = ({ children }) => {
             });
     };
 
-    
-
     // Gestione ordinamento
     const [sortCriteria, setSortCriteria] = useState({ field: 'name', order: 'asc' });
 
@@ -81,17 +113,16 @@ const GlobalProvider = ({ children }) => {
         });
     };
 
-    // Funzione per ordinare i prodotti
     const sortProducts = (products) => {
         const { field, order } = sortCriteria;
         return [...products].sort((a, b) => {
             if (field === 'name') {
-                return order === 'asc' 
-                    ? a.name.localeCompare(b.name) 
+                return order === 'asc'
+                    ? a.name.localeCompare(b.name)
                     : b.name.localeCompare(a.name);
             } else if (field === 'price') {
-                return order === 'asc' 
-                    ? a.price - b.price 
+                return order === 'asc'
+                    ? a.price - b.price
                     : b.price - a.price;
             }
             return 0;
@@ -100,29 +131,7 @@ const GlobalProvider = ({ children }) => {
 
     const sortedProducts = sortProducts(searchProducts);
 
-    // VISUALIZZAZIONE GRIGLIA - LISTA
-    const [viewMode, setViewMode] = useState("grid"); // "grid" o "list"
-
-    // Aggiungere gestione dei parametri dell'URL
-    const [searchParams, setSearchParams] = useSearchParams();
-    
-    useEffect(() => {
-        const queryParam = searchParams.get('q') || '';
-        const sortField = searchParams.get('sortField');
-        const sortOrder = searchParams.get('sortOrder');
-    
-        setQuery(queryParam);
-    
-        if (queryParam) {
-            // ⚠️ Non vogliamo che questo chiami navigate
-            handleSubmit(queryParam, false);
-        }
-    
-        if (sortField && sortOrder) {
-            setSortCriteria({ field: sortField, order: sortOrder });
-        }
-    }, [searchParams]);
-
+    // Gestione carrello e wishlist
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart));
     }, [cart]);
@@ -165,9 +174,9 @@ const GlobalProvider = ({ children }) => {
     const handleQuantityChange = (index, value) => {
         const product = cart[index];
         const maxStock = product.availability;
-    
+
         const newQuantity = Math.min(parseInt(value), maxStock);
-    
+
         const updatedQuantities = [...quantities];
         updatedQuantities[index] = newQuantity;
         setQuantities(updatedQuantities);
@@ -182,7 +191,7 @@ const GlobalProvider = ({ children }) => {
         const itemToRemove = wish.find((item) => item.id === id);
         if (itemToRemove) {
             setWish((prevWish) => prevWish.filter((item) => item.id !== id));
-        };
+        }
     };
 
     const setFieldValue = (e) => {
@@ -192,7 +201,7 @@ const GlobalProvider = ({ children }) => {
 
     const submitCheckout = (e, navigate) => {
         e.preventDefault();
-       
+
         const cartWithQuantities = cart.map((item, index) => ({
             id_product: item.id,
             quantity: quantities[index] || 1
@@ -207,7 +216,7 @@ const GlobalProvider = ({ children }) => {
             headers: { 'Content-Type': 'application/json' },
         })
             .then((res) => {
-                setShippingCost(res.data.shippingCost); 
+                setShippingCost(res.data.shippingCost);
                 setCart([]);
                 setFormData(initialData);
                 navigate("/thankyou");
@@ -216,8 +225,6 @@ const GlobalProvider = ({ children }) => {
                 console.log(err.response?.data?.error || "Errore durante l'invio dell'ordine");
             });
     };
-
-
 
     const value = {
         query,
@@ -244,8 +251,10 @@ const GlobalProvider = ({ children }) => {
         setViewMode,
         shippingCost,
         setShippingCost,
-
-
+        fetchProducts,
+        filterProducts,
+        renderFilteredProducts,
+        products,
     };
 
     return (
