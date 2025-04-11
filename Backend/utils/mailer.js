@@ -8,8 +8,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false,  // non usare SSL
   auth: {
-    user: '115e86fd529a3e',  // Inserisci il tuo user ID di Mailtrap
-    pass: 'f0f346818530ee'  // Inserisci la tua password di Mailtrap
+    user: '88e355bf61b85d',  // Inserisci il tuo user ID di Mailtrap
+    pass: 'bd88091569b2d6'  // Inserisci la tua password di Mailtrap
   }
 });
 
