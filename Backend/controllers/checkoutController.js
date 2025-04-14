@@ -8,7 +8,7 @@ function isValidEmail(email) {
 }
 
 // Funzione per memorizzare un nuovo ordine nel database
-function storeOrder(req, res) {
+function storeOrder(req, res) {  //C.R.U.D
   // Estrai i dati necessari dalla richiesta
   const {
     userName,
@@ -31,7 +31,7 @@ function storeOrder(req, res) {
   }
 
   // Estrai gli ID dei prodotti e le relative quantità dal carrello
-  const productIds = carts.map(cart => cart.id_product);
+  const productIds = carts.map(cart => cart.id_product); 
   const productQuantities = carts.map(cart => cart.quantity);
 
   // Query SQL per verificare la disponibilità dei prodotti
@@ -76,6 +76,8 @@ function storeOrder(req, res) {
       });
 
       const shippingCost = totalPrice > 200 ? 0 : 25;
+
+
       const grandTotal = totalPrice + shippingCost;
 
       // Query SQL per inserire l'ordine nel database
@@ -100,7 +102,7 @@ function storeOrder(req, res) {
         // Ottieni l'ID dell'ordine appena creato
         const orderId = results.insertId;
 
-        // Crea l'elenco dei prodotti da inserire nella tabella "order_product"
+       // Crea un array con i dettagli dei prodotti (ordine, id, nome, quantità, prezzo) da inserire in "order_product".
         const orderProductsDb = priceResults.map((product, index) => ([
           orderId,
           product.id,
@@ -109,6 +111,8 @@ function storeOrder(req, res) {
           product.price
         ]));
 
+
+         // Crea un array con i dettagli dei prodotti con nome, quantità e prezzo, utile per l'email dell'ordine.
         const orderProductsForEmail = priceResults.map((product, index) => ({
           name: product.name,
           quantity: productQuantities[index],
@@ -129,7 +133,7 @@ function storeOrder(req, res) {
             });
           }
 
-          // Aggiorna la disponibilità dei prodotti nel database (decrementando la quantità disponibile)
+          // Aggiorna la disponibilità dei prodotti nel database (decrementando la quantità )
           const subAvSql = `UPDATE products p
             JOIN order_product op ON p.id = op.product_id
             SET p.availability = p.availability - op.quantity
