@@ -8,7 +8,7 @@ function isValidEmail(email) {
 }
 
 // Funzione per memorizzare un nuovo ordine nel database
-function storeOrder(req, res) {  //C.R.U.D
+function storeOrder(req, res) {  
   // Estrai i dati necessari dalla richiesta
   const {
     userName,
@@ -46,8 +46,7 @@ function storeOrder(req, res) {  //C.R.U.D
       });
     }
 
-    // Flag per determinare se c'è un prodotto fuori stock
-    let outOfStock = false;
+  
     // Ciclo per verificare la disponibilità di ciascun prodotto
     for (let i = 0; i < availabilityResults.length; i++) {
       if (availabilityResults[i].availability < productQuantities[i]) {
